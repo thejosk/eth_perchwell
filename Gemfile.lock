@@ -243,6 +243,8 @@ GEM
       rubocop-rails
     ruby-progressbar (1.13.0)
     securerandom (0.3.1)
+    shoulda-matchers (6.5.0)
+      activesupport (>= 5.2.0)
     sprockets (4.2.1)
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
@@ -287,6 +289,7 @@ DEPENDENCIES
   rails (~> 7.2.1)
   rspec-rails (~> 6.1.0)
   rubocop-rails-omakase
+  shoulda-matchers (~> 6.0)
   sprockets-rails
   tzinfo-data
   web-console
