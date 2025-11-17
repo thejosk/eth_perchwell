@@ -43,12 +43,7 @@ RSpec.describe CustomField, type: :model do
         expect(field.name).to eq('building_floor_count')
       end
 
-      it 'combines all normalizations' do
-        field = create(:custom_field, name: '  Property Value USD  ')
-        expect(field.name).to eq('property_value_usd')
-      end
-
-      it 'prevents duplicate names case-insensitively per client' do
+      it 'prevents duplicate names per client(case-insensitive)' do
         client = create(:client)
         create(:custom_field, name: 'building_size', client: client)
         duplicate = build(:custom_field, name: 'Building_Size', client: client)

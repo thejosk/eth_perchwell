@@ -38,15 +38,15 @@ RSpec.describe Building, type: :model do
     end
   end
 
-  describe '#set_custom_field_values' do
+  describe '#set_custom_field_values!' do
     let(:client) { create(:client) }
     let(:building) { create(:building, client: client) }
-    let(:number_field) { create(:custom_field, :number, name: "building_size", client: client) }
-    let(:text_field) { create(:custom_field, name: "brick_color", field_type: "freeform", client: client) }
-    let(:enum_field) { create(:custom_field, :enum, name: "status", client: client) }
+    let!(:number_field) { create(:custom_field, :number, name: "building_size", client: client) }
+    let!(:text_field) { create(:custom_field, name: "brick_color", field_type: "freeform", client: client) }
+    let!(:enum_field) { create(:custom_field, :enum, name: "status", client: client) }
 
     it 'creates custom field values' do
-      building.set_custom_field_values({
+      building.set_custom_field_values!({
         "building_size" => "5000",
         "brick_color" => "Red"
       })
@@ -58,21 +58,21 @@ RSpec.describe Building, type: :model do
     it 'updates existing custom field values' do
       create(:custom_field_value, building: building, custom_field: number_field, value: "5000")
 
-      building.set_custom_field_values({ "building_size" => "6000" })
+      building.set_custom_field_values!({ "building_size" => "6000" })
 
       expect(building.custom_field_values.count).to eq(1)
       expect(building.custom_field_values_hash["building_size"]).to eq("6000")
     end
 
     it 'validates values and adds errors for invalid ones' do
-      building.set_custom_field_values({ "building_size" => "not_a_number" })
+      building.set_custom_field_values!({ "building_size" => "not_a_number" })
 
       expect(building.errors[:base]).to include("Invalid value for custom field 'building_size': must be a number")
       expect(building.custom_field_values.count).to eq(0)
     end
 
     it 'ignores unknown field names' do
-      building.set_custom_field_values({
+      building.set_custom_field_values!({
         "building_size" => "5000",
         "unknown_field" => "value"
       })
@@ -82,19 +82,19 @@ RSpec.describe Building, type: :model do
     end
 
     it 'accepts case-insensitive enum values' do
-      building.set_custom_field_values({ "status" => "option 1" })
+      building.set_custom_field_values!({ "status" => "option 1" })
 
       expect(building.custom_field_values_hash["status"]).to eq("option 1")
     end
 
     it 'returns early if data is not a hash' do
-      building.set_custom_field_values("not a hash")
+      building.set_custom_field_values!("not a hash")
 
       expect(building.custom_field_values.count).to eq(0)
     end
 
     it 'accepts symbol keys' do
-      building.set_custom_field_values({ building_size: "5000" })
+      building.set_custom_field_values!({ building_size: "5000" })
 
       expect(building.custom_field_values_hash["building_size"]).to eq("5000")
     end

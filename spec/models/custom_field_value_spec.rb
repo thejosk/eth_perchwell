@@ -14,7 +14,7 @@ RSpec.describe CustomFieldValue, type: :model do
       let(:number_field) { create(:custom_field, :number, client: client) }
 
       it 'validates value matches field type' do
-        value = build(:custom_field_value, building: building, custom_field: number_field, value: "not_a_number")
+        value = build(:custom_field_value, building: building, custom_field: number_field, value: "not_number")
         expect(value).not_to be_valid
         expect(value.errors[:value]).to include("must be a number")
       end

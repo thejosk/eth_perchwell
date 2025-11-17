@@ -11,6 +11,7 @@ class CustomFieldValue < ApplicationRecord
 
   def value_matches_field_type
     return if value.blank? # Allow empty values
+    return unless custom_field
 
     unless custom_field.valid_value?(value)
       errors.add(:value, custom_field.validation_error(value))

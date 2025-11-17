@@ -4,7 +4,7 @@ FactoryBot.define do
     sequence(:street) { |n| "#{n} Main St" }
     city { "Test City" }
     state { "NY" }
-    zip { "10001" }
+    zip { "10000" }
     country { "USA" }
   end
 end
