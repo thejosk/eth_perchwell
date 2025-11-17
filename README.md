@@ -82,3 +82,5 @@ The following implementation assumptions were made during development:
 4. The `per_page` parameter defaults to 10 when not present in the request. The maximum allowed value is set to 100 to prevent performance issues.
 
 5. The creation and update of building is wrapped in an activerecord transaction for consistency. If custom field values are invalid, the transaction is rolled back and the error response is returned.
+
+6. I have not enforced any uniqueness constraint on Building model. The same client (or different client) can create multiple buildings with the same address. Ideally, I think we could prevent this by using a standard address validator (Geocoder or a similar service). But I didn't go that far as address is a freeform text field.
