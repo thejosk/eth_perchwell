@@ -64,3 +64,21 @@ curl -X PATCH http://localhost:3000/api/buildings/1 \
   }' | jq
 ```
 
+# Implementation Assumptions
+
+The following implementation assumptions were made during development:
+
+1. Only the `street` field is required in the Building model. The fields `city`, `state`, `zip`, and `country` are optional. The json api response includes an `address` key containing a comma-separated concatenation of all non blank address fields in the following order: street, city, state, zip, country.
+   - Example (full address): `"address": "123 Main St, Austin, TX, 10000, USA"`
+   - Example (partial address): `"address": "123 Main St"` (if only street is provided)
+
+2. Custom fields of type "number" accept string input and validate that the value can be converted to a Float (will error if not convertible). Both input and output remain as strings in the api to maintain consistency with the provided example responses (e.g., `"rock_wall_size": "15"`).
+   - Input: String value (e.g., `"5000"`)
+   - Validation: Check if convertible to Float
+   - Output: String value (e.g., `"5000"`)
+
+3. Enum custom fields are made case-insensitive.   
+
+4. The `per_page` parameter defaults to 10 when not present in the request. The maximum allowed value is set to 100 to prevent performance issues.
+
+5. The creation and update of building is wrapped in an activerecord transaction for consistency. If custom field values are invalid, the transaction is rolled back and the error response is returned.
